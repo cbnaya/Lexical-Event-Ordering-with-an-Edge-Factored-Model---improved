@@ -1,0 +1,1 @@
+--trn_stats "train_set" --trn_weights "train_set_weights" -t "dev_set"  --num_iters "3" -r "train_results_extended_30.txt" --tl "30.0" --learning_rate "1.0" --avg --pfv "train_pfv_extended_30.txt"  "--model_pickle" "train_pickle_extended_30.txt" "--extended"

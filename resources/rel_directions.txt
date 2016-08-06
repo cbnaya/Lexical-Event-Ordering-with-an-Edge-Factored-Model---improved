@@ -1,0 +1,19 @@
+after	false
+as	sync
+as long as	sync
+as soon as	sync
+before	true
+in turn	ignore
+once	false
+since	false
+till	true
+until	true
+whereas	ignore
+while	sync
+meantime	sync
+finally	true
+later	true
+meanwhile	sync	
+once	false
+then	true
+when	false
