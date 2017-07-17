@@ -61,7 +61,7 @@ def run_discourse_marker_classifier(trees_list):
     
 def run_pipeline(in_filename,out_filename):
     file_text = open(in_filename, "r").read()
-    recipes = meal_master_parser.parse(file_text)
+    recipes = [recipe['direction_lines'] for recipe in meal_master_parser.parse(file_text)]
     processed_recipes = [preprocess_data.run_preprocessing(recipe) for recipe in recipes]
 
     list_of_tree_sd_string_pairs = parse_file(in_filename+'.preprocessed')
