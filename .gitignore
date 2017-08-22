@@ -3,3 +3,4 @@
 *.pyc
 *.mmf
 *.log
+/addDiscourse/*
