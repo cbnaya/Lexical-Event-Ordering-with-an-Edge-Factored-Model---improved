@@ -349,7 +349,7 @@ def run_recipe_ordering(stats_training_file,weights_training_file,test_file,opti
 
         print('Total number of features:'+str(len(vec_feature_names)))
         #print(vec_feature_names)
-    else:
+    else:  # extract the features from the event files, and don't load them from pickled files
         training_samples,training_labels, training_labels_tournament, test_samples,test_labels, test_labels_tournament,\
         vec_feature_names = \
             extract_all_features(stats_training_file,weights_training_file,test_file,options,num_topics_arg_lda,\
@@ -390,7 +390,7 @@ def run_recipe_ordering(stats_training_file,weights_training_file,test_file,opti
         perceptron.set_time_limit(options.time_limit)
         if options.seen_instances_loaded_model:
             perceptron._interm_averaged_model_num_instances = options.seen_instances_loaded_model
-    else:
+    else: # train the model from anew
         if options.extended_precepteron:
             perceptron = decoder_extended.StructuredPerceptronExtended(len(vec_feature_names), \
                                                       num_iters, learning_rate, averaged, vec_feature_names, \
@@ -429,7 +429,7 @@ def run_recipe_ordering(stats_training_file,weights_training_file,test_file,opti
         training_labels_tournament = training_labels_tournament[:4000]
         '''
 
-        if options.extended_precepteron:
+        if options.extended_precepteron:  # run the training
             perceptron.fit(training_samples, training_labels, training_labels_tournament)
         elif options.baseline in [0,1]:
             #pass
