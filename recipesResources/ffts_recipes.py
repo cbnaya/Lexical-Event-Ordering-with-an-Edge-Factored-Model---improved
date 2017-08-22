@@ -85,7 +85,7 @@ def create_recipes_batch(recipes_folder, files_list):
     return result
 
 
-def get_recipes(recipes_folder=DEFAULT_RECIPES_FOLDER):
+def get_all_recipes(recipes_folder=DEFAULT_RECIPES_FOLDER):
     if not os.path.isdir(recipes_folder):
         download_all_recipes(recipes_folder)
 
@@ -94,6 +94,12 @@ def get_recipes(recipes_folder=DEFAULT_RECIPES_FOLDER):
     test = create_recipes_batch(recipes_folder, TEST_RECIPES)
 
     return train, dev, test
+
+
+def get_recipe_by_name(name, recipes_folder=DEFAULT_RECIPES_FOLDER):
+    if not os.path.isdir(recipes_folder):
+        download_all_recipes(recipes_folder)
+    return create_recipes_batch(recipes_folder, [name])
 
 
 def main():
