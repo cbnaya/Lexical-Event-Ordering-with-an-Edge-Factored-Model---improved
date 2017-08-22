@@ -22,7 +22,7 @@ def add_you_preprocessing(text):
             words.insert(0, 'you')
             words[1] = words[1].lower()
         result += ' '.join(words) + '. '
-
+    return result
 
 def run_preprocessing(text):
     return add_you_preprocessing(text)
