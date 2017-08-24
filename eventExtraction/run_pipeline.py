@@ -48,29 +48,35 @@ def add_discourse(parse_tree_str):
 
 def run_pipeline(recipes):
     preprocessed_recipes = [preprocess_data.run_preprocessing(recipe) for recipe in recipes]
-
+    f = open("res", "w")
     for recipe in preprocessed_recipes:
-        sentences = parse_recipe(recipe)
-        sentences = [(add_discourse(parse_tree), dependecies_tree) for parse_tree, dependecies_tree in sentences]
+        try:
+            sentences = parse_recipe(recipe)
+            sentences = [(add_discourse(parse_tree), dependecies_tree) for parse_tree, dependecies_tree in sentences]
 
-        for parse_tree, dependecies_tree in sentences:
-            ptree = extract_events.read_tree(parse_tree)
-            standep = extract_events.read_sds_from_string(dependecies_tree)
-            
+            for parse_tree, dependecies_tree in sentences:
+                f.write(parse_tree + "\n" + dependecies_tree + "\n")
+                f.write('=========\n')
+                # ptree = extract_events.read_tree(parse_tree)
+                # standep = extract_events.read_sds_from_string(dependecies_tree)
+        except Exception as e:
+            print "{0}\n{1}".format(recipe, e.message)
+            continue
 
-        # # reads the stanford deps, the ptree and write it to f_out
-        # f_out = open(out_filename, 'w')
-        # f_out_parses = open(out_filename + '.parses', 'w')
-        # for recipe in list_of_tree_sd_string_pairs:
-        #     for tree_sd_string_pair in recipe:
-        #         f_out_parses.write(tree_sd_string_pair[0] + '\n' + tree_sd_string_pair[1] + '\n')
-        #         ptree = extract_events.read_tree(tree_sd_string_pair[0])
-        #         standep = extract_events.read_sds_from_string(tree_sd_string_pair[1])
-        #         extract_events.write_events_linkages(standep, ptree, f_out)
-        #     f_out.write('=========\n')
-        #     f_out_parses.write('=========\n')
-        # f_out.close()
-        # f_out_parses.close()
+
+            # # reads the stanford deps, the ptree and write it to f_out
+            # f_out = open(out_filename, 'w')
+            # f_out_parses = open(out_filename + '.parses', 'w')
+            # for recipe in list_of_tree_sd_string_pairs:
+            #     for tree_sd_string_pair in recipe:
+            #         f_out_parses.write(tree_sd_string_pair[0] + '\n' + tree_sd_string_pair[1] + '\n')
+            #         ptree = extract_events.read_tree(tree_sd_string_pair[0])
+            #         standep = extract_events.read_sds_from_string(tree_sd_string_pair[1])
+            #         extract_events.write_events_linkages(standep, ptree, f_out)
+            #     f_out.write('=========\n')
+            #     f_out_parses.write('=========\n')
+            # f_out.close()
+            # f_out_parses.close()
 
 
 if __name__ == "__main__":
