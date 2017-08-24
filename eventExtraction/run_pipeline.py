@@ -24,6 +24,9 @@ def parse_recipe(recipe_text):
     annotate_result = nlp.annotate(recipe_text, properties={'annotators': 'parse, depparse',
                                                             'outputFormat': 'json',
                                                             'timeout': '50000'})
+    if type(annotate_result) in (str, unicode):
+        raise Exception(annotate_result)
+
     for trees in annotate_result['sentences']:
         parse_tree = re.sub("\s+", " ", trees['parse']).encode("utf8")
         dependecy_tree = build_dep_string(trees['basicDependencies']).encode("utf8")
