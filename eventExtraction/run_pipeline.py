@@ -6,7 +6,6 @@ import preprocess_data
 import tempfile
 import re
 import pycorenlp
-import extract_events
 from recipesResources import ffts_recipes
 
 
