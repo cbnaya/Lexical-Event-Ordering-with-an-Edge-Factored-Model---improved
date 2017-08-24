@@ -32,6 +32,8 @@ def parse_recipe(recipe_text):
 
 
 def add_discourse(parse_tree_str):
+    if not os.path.isdir("addDiscourse"):
+        raise Exception("addDiscourse not found")
     f = tempfile.NamedTemporaryFile(delete=False)
     f.write(parse_tree_str)
     f.close()
