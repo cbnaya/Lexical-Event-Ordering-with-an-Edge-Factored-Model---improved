@@ -56,13 +56,14 @@ def run_pipeline(recipes):
 
             for parse_tree, dependecies_tree in sentences:
                 f.write(parse_tree + "\n" + dependecies_tree + "\n")
-                f.write('=========\n')
+
                 # ptree = extract_events.read_tree(parse_tree)
                 # standep = extract_events.read_sds_from_string(dependecies_tree)
         except Exception as e:
-            print "{0}\n{1}".format(recipe, e.message)
+            print "===========\n{0}\nerror message:{1}\n".format(recipe, e)
             continue
 
+        f.write('=========\n')
 
             # # reads the stanford deps, the ptree and write it to f_out
             # f_out = open(out_filename, 'w')
