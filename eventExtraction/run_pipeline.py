@@ -22,7 +22,8 @@ def parse_recipe(recipe_text):
     result = []
     nlp = pycorenlp.StanfordCoreNLP('http://localhost:9000')
     annotate_result = nlp.annotate(recipe_text, properties={'annotators': 'parse, depparse',
-                                                   'outputFormat': 'json'})
+                                                            'outputFormat': 'json',
+                                                            'timeout': '50000'})
     for trees in annotate_result['sentences']:
         parse_tree = re.sub("\s+", " ", trees['parse']).encode("utf8")
         dependecy_tree = build_dep_string(trees['basicDependencies']).encode("utf8")
