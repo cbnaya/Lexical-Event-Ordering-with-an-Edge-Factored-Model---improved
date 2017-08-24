@@ -10,11 +10,11 @@ from recipesResources import ffts_recipes
 
 
 def build_dep_string(dependency_result):
-    deps = ["{0}({1}-{2}, {3}-{4})".format(dep["dep"],
-                                           dep["governorGloss"],
-                                           dep["governor"],
-                                           dep['dependentGloss'],
-                                           dep['dependent']) for dep in dependency_result]
+    deps = [u"{0}({1}-{2}, {3}-{4})".format(dep["dep"],
+                                            dep["governorGloss"],
+                                            dep["governor"],
+                                            dep['dependentGloss'],
+                                            dep['dependent']) for dep in dependency_result]
     return os.linesep.join(deps)
 
 
@@ -24,8 +24,9 @@ def parse_recipe(recipe_text):
     annotate_result = nlp.annotate(recipe_text, properties={'annotators': 'parse, depparse',
                                                    'outputFormat': 'json'})
     for trees in annotate_result['sentences']:
-        parse_tree = re.sub("\s+", " ", trees['parse'])
-        dependecy_tree = build_dep_string(trees['basicDependencies'])
+        parse_tree = re.sub("\s+", " ", trees['parse']).encode("utf8")
+        dependecy_tree = build_dep_string(trees['basicDependencies']).encode("utf8")
+
         result.append((parse_tree, dependecy_tree))
     return result
 
