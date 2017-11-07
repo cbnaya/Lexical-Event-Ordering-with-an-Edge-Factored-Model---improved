@@ -445,10 +445,9 @@ def main(args):
     f.close()
 
 
-sec_verb_list = preprocess_data.get_target_verb_list(\
-    '/afs/inf.ed.ac.uk/user/o/oabend/event_ordering_resources/secondary_verbs.txt')
+sec_verb_list = open('resources/secondary_verbs.txt').readlines()
 for v in sec_verb_list:
-    SECONDARY_VERBS.extend(pattern.en.lexeme(v))
+    SECONDARY_VERBS.extend(pattern.en.lexeme(v.strip()))
 
 if __name__ == "__main__":
     main(sys.argv)
