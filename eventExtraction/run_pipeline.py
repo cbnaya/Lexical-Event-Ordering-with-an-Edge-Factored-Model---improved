@@ -6,6 +6,7 @@ import preprocess_data
 import tempfile
 import re
 import pycorenlp
+import extract_events
 from recipesResources import ffts_recipes
 
 
@@ -15,7 +16,7 @@ def build_dep_string(dependency_result):
                                             dep["governor"],
                                             dep['dependentGloss'],
                                             dep['dependent']) for dep in dependency_result]
-    return os.linesep.join(deps)
+    return os.linesep.decode("ascii").join(deps)
 
 
 def parse_recipe(recipe_text):
@@ -28,34 +29,42 @@ def parse_recipe(recipe_text):
         raise Exception(annotate_result)
 
     for trees in annotate_result['sentences']:
-        parse_tree = re.sub("\s+", " ", trees['parse']).encode("utf8")
+        parse_tree = re.sub(u"\s+", u" ", trees['parse']).encode("utf8")
         dependecy_tree = build_dep_string(trees['basicDependencies']).encode("utf8")
-
         result.append((parse_tree, dependecy_tree))
     return result
 
 
-def add_discourse(parse_tree_str):
+def add_discourse(parse_trees):
+    text = os.linesep.join(parse_trees)
     if not os.path.isdir("addDiscourse"):
         raise Exception("addDiscourse not found")
     f = tempfile.NamedTemporaryFile(delete=False)
-    f.write(parse_tree_str)
+    f.write(text)
     f.close()
     with_discourse = os.popen("perl addDiscourse/addDiscourse.pl --parses %s" % f.name).read().strip()
+    # TODO: handle the encoding
     os.remove(f.name)
-    return with_discourse
+    return with_discourse.splitlines()
 
 
 def run_pipeline(recipes):
     preprocessed_recipes = [preprocess_data.run_preprocessing(recipe) for recipe in recipes]
     f = open("res", "w")
+    f_out = open("events", "w")
     for recipe in preprocessed_recipes:
         try:
             sentences = parse_recipe(recipe)
-            sentences = [(add_discourse(parse_tree), dependecies_tree) for parse_tree, dependecies_tree in sentences]
+            parse_tree_with_discourse = add_discourse([parse_tree for parse_tree, dependecies_tree in sentences])
+            # replace the parse tree with parse tree with discourse
+            sentences = [(parse_tree_with_discourse[i], sentences[i][1]) for i in range(len(sentences))]
 
             for parse_tree, dependecies_tree in sentences:
                 f.write(parse_tree + "\n" + dependecies_tree + "\n")
+
+                ptree = extract_events.read_tree(parse_tree)
+                standep = extract_events.read_sds_from_string(dependecies_tree)
+                extract_events.write_events_linkages(standep, ptree, f_out)
 
                 # ptree = extract_events.read_tree(parse_tree)
                 # standep = extract_events.read_sds_from_string(dependecies_tree)
